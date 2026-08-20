@@ -12,7 +12,8 @@ public class UserJpa implements Users {
 
     @Override
     public User save(String name) {
-        UserEntity entity = UserEntity.from(name);
+        User user = User.create(name, 0);
+        UserEntity entity = UserEntity.from(user);
         delegate.save(entity);
         return entity.toDomain();
     }

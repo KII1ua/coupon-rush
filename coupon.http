@@ -1,0 +1,21 @@
+### 쿠폰 생성 (재고 수량 지정)
+POST http://localhost:8080/api/coupons/save/coupon
+Content-Type: application/json
+
+{
+  "quantity": 1000
+}
+
+### 쿠폰 발급 (couponId는 위 생성 응답의 id로 교체)
+POST http://localhost:8080/api/coupons/1/issue
+Content-Type: application/json
+
+{
+  "userId": 1
+}
+
+### 남은 재고 조회
+GET http://localhost:8080/api/coupons/1/stock
+
+### 발급 내역 초기화 (해당 쿠폰의 발급 기록 전체 삭제)
+POST http://localhost:8080/api/coupons/1/stock/init

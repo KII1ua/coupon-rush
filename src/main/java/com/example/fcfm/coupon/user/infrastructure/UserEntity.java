@@ -25,8 +25,8 @@ public class UserEntity {
         this.coupons = 0;
     }
 
-    public static UserEntity from(String name) {
-        return new UserEntity(name);
+    public static UserEntity from(User user) {
+        return new UserEntity(user.getName());
     }
 
     public User toDomain() {

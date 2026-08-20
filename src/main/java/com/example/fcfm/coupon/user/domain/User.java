@@ -14,6 +14,10 @@ public class User {
         this.coupons = coupons;
     }
 
+    public static User create(String name, Integer coupons) {
+        return new User(null, name, coupons);
+    }
+
     public static User from(Long id, String name, Integer coupons) {
         return new User(id, name, coupons);
     }
