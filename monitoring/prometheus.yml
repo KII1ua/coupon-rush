@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 2s        # k6 테스트가 10초라 기본 15초로는 너무 성겨요
+
+scrape_configs:
+  - job_name: coupon-app
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8080']   # 앱은 맥에서 IntelliJ로 뜨니까
+
+  - job_name: postgres
+    static_configs:
+      - targets: ['postgres-exporter:9187']

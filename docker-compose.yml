@@ -15,6 +15,40 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: coupon-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # 컨테이너에서 맥의 8080(앱)에 접근
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: coupon-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+    depends_on:
+      - prometheus
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: coupon-postgres-exporter
+    ports:
+      - "9187:9187"
+    environment:
+      DATA_SOURCE_NAME: "postgresql://coupon:coupon1234@postgres:5432/coupon?sslmode=disable"
+    depends_on:
+      - postgres
 
 volumes:
   postgres-data:
+  grafana-data:

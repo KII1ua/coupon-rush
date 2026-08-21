@@ -1,3 +1,18 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true     # Grafana에서 p95/p99 계산할 수 있게 히스토그램으로
+
+server:
+  tomcat:
+    mbeanregistry:
+      enabled: true
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/coupon
