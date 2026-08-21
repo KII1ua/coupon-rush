@@ -27,4 +27,10 @@ public class CouponJpa implements Coupons {
                 .map(CouponEntity::toDomain)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
     }
+
+    @Override
+    public Coupon findByIdForUpdate(Long couponId) {
+        return delegate.findByIdForUpdate(couponId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다.")).toDomain();
+    }
 }

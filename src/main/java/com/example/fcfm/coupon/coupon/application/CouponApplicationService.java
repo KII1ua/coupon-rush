@@ -18,14 +18,12 @@ public class CouponApplicationService {
 
     @Transactional
     public Coupon save(CouponCommand command) {
-
-
         return coupons.save(command.totalQuantity());
     }
 
     @Transactional
     public IssueCoupon saveIssueCoupon(IssueCouponCommand command) {
-        Coupon coupon = coupons.findById(command.couponId());
+        Coupon coupon = coupons.findByIdForUpdate(command.couponId());
 
         if(!(couponCount(coupon.getId()) > 0)) {
             throw new IllegalArgumentException("남아 있는 쿠폰이 없습니다.");
