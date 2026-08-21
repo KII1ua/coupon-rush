@@ -5,8 +5,6 @@ import com.example.fcfm.coupon.coupon.domain.Coupons;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Repository
 public class CouponJpa implements Coupons {
@@ -32,5 +30,15 @@ public class CouponJpa implements Coupons {
     public Coupon findByIdForUpdate(Long couponId) {
         return delegate.findByIdForUpdate(couponId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다.")).toDomain();
+    }
+
+    @Override
+    public boolean decreaseRemain(Long couponId) {
+        return delegate.decreaseRemain(couponId) == 1;
+    }
+
+    @Override
+    public void resetRemain(Long couponId) {
+        delegate.resetRemain(couponId);
     }
 }

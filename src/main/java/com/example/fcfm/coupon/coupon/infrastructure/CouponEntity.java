@@ -8,7 +8,6 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @Entity
@@ -20,16 +19,19 @@ public class CouponEntity {
 
     private Integer totalQuantity;
 
-    private CouponEntity(Long id, Integer totalQuantity) {
+    private Integer remainQuantity;
+
+    private CouponEntity(Long id, Integer totalQuantity, Integer remainQuantity) {
         this.id = id;
         this.totalQuantity = totalQuantity;
+        this.remainQuantity = remainQuantity;
     }
 
     public static CouponEntity from(Coupon coupon) {
-        return new CouponEntity(coupon.getId(), coupon.getTotalQuantity());
+        return new CouponEntity(coupon.getId(), coupon.getTotalQuantity(), coupon.getRemainQuantity());
     }
 
     public Coupon toDomain() {
-        return Coupon.from(id, totalQuantity);
+        return Coupon.from(id, totalQuantity, remainQuantity);
     }
 }

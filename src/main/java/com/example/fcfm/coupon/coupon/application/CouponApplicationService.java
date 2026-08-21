@@ -23,28 +23,21 @@ public class CouponApplicationService {
 
     @Transactional
     public IssueCoupon saveIssueCoupon(IssueCouponCommand command) {
-        Coupon coupon = coupons.findByIdForUpdate(command.couponId());
-
-        if(!(couponCount(coupon.getId()) > 0)) {
+        if (!coupons.decreaseRemain(command.couponId())) {
             throw new IllegalArgumentException("남아 있는 쿠폰이 없습니다.");
         }
         return issueCoupons.save(command.couponId(), command.userId());
     }
 
     // 남아 있는 쿠폰 개수
-    @Transactional
+    @Transactional(readOnly = true)
     public Integer couponCount(Long couponId) {
-        Coupon coupon = coupons.findById(couponId);
-
-        int totalQuantity = coupon.getTotalQuantity();
-
-        int issueCount = issueCoupons.countByCouponId(couponId);
-
-        return totalQuantity - issueCount;
+        return coupons.findById(couponId).getRemainQuantity();
     }
 
     @Transactional
     public void deleteStock(Long couponId) {
         issueCoupons.deleteAllByCouponId(couponId);
+        coupons.resetRemain(couponId);
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface IssueCouponJpaRepository extends JpaRepository<IssueCouponEntity, Long> {
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select count(i) from IssueCouponEntity i where i.couponId = :couponId")
     Integer countByCouponId(@Param("couponId") Long couponId);
 
