@@ -28,8 +28,9 @@ public class CouponController {
     }
 
     @PostMapping("/{id}/issue")     // 발급
-    public ResponseEntity<IssueCoupon> issue(@PathVariable("id") Long couponId, @RequestBody IssueRequest req) {
-        return ResponseEntity.ok(service.saveIssueCoupon(new IssueCouponCommand(req.userId(), couponId)));
+    public ResponseEntity<IssueResponse> issue(@PathVariable("id") Long couponId, @RequestBody IssueRequest req) {
+        service.issue(new IssueCouponCommand(req.userId(), couponId));
+        return ResponseEntity.ok(new IssueResponse(couponId, req.userId(), "ISSUED"));
     }
 
     @PostMapping("/save/coupon")

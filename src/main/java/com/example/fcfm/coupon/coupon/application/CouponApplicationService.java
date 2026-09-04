@@ -13,6 +13,7 @@ public class CouponApplicationService {
     private final Coupons coupons;
     private final IssueCoupons issueCoupons;
     private final CouponIssuer issuer;
+    private final CouponIssuedPublisher publisher;
 
     @Transactional
     public Coupon save(CouponCommand command) {
@@ -21,8 +22,8 @@ public class CouponApplicationService {
         return coupon;
     }
 
-    // 트랜잭션 사용 X
-    public IssueCoupon saveIssueCoupon(IssueCouponCommand command) {
+    // 트랜잭션 사용 X. Redis 판정 → Kafka 발행까지가 요청 경로이고, DB 저장은 컨슈머가 뒤에서 처리한다.
+    public void issue(IssueCouponCommand command) {
         IssueResult result = issuer.tryIssue(command.couponId(), command.userId());
 
         switch (result) {
@@ -33,7 +34,7 @@ public class CouponApplicationService {
         }
 
         try {
-            return issueCoupons.save(command.couponId(), command.userId());
+            publisher.publish(command.couponId(), command.userId());
         } catch (RuntimeException e) {
             issuer.cancel(command.couponId(), command.userId());
             throw e;
