@@ -6,8 +6,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop       # 개발용. 운영이면 validate
-    defer-datasource-initialization: true   # 테이블 생성(JPA) 후 data.sql 실행
+      ddl-auto: update       # 컨슈머 앱과 DB를 공유하므로 create-drop 금지 (api 종료 시 컨슈머가 쓰는 테이블까지 삭제됨)
+    defer-datasource-initialization: true
     properties:
       hibernate:
         format_sql: true
@@ -21,10 +21,5 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
-    consumer:
-      group-id: coupon-issue-consumer
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
       properties:
-        spring.json.trusted.packages: "com.example.fcfm.coupon.*"
+        spring.json.add.type.headers: false   # 클래스명이 계약이 되지 않도록 타입 헤더 제거 (컨슈머는 별도 앱)

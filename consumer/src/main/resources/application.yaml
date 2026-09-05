@@ -1,0 +1,23 @@
+spring:
+  main:
+    web-application-type: none      # 웹서버 불필요 (컨슈머 전용 앱)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/coupon
+    username: coupon
+    password: coupon1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none                # 스키마 주인은 api 모듈. 컨슈머는 INSERT만
+    show-sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: coupon-issue-consumer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.example.fcfm.*"
+        spring.json.use.type.headers: false   # 헤더의 클래스명 대신 아래 고정 타입으로 역직렬화
+        spring.json.value.default.type: com.example.fcfm.couponconsumer.CouponIssuedMessage
