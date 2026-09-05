@@ -3,7 +3,7 @@ POST http://localhost:8080/api/coupons/save/coupon
 Content-Type: application/json
 
 {
-  "quantity": 2000
+  "quantity": 5000
 }
 
 ### 쿠폰 발급 (couponId는 위 생성 응답의 id로 교체)

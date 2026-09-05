@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/coupon
+    username: coupon
+    password: coupon1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update       # 컨슈머 앱과 DB를 공유하므로 create-drop 금지 (api 종료 시 컨슈머가 쓰는 테이블까지 삭제됨)
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      properties:
+        spring.json.add.type.headers: false   # 클래스명이 계약이 되지 않도록 타입 헤더 제거 (컨슈머는 별도 앱)
